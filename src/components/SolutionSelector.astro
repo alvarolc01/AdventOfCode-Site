@@ -1,0 +1,11 @@
+---
+
+---
+<label>
+    <select x-model="selectedYear">
+        <option value="" disabled selected>Select an option</option>
+        <template x-for="yearlySolutions in solutions" :key="yearlySolutions.year">
+            <option :value="yearlySolutions.year" x-text="yearlySolutions.year"></option>
+        </template>
+    </select>
+</label>

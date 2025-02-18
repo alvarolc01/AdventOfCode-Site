@@ -1,0 +1,15 @@
+---
+import SolutionSelector from "./SolutionSelector.astro"
+
+import solutions from "../data/solutions.json"
+---
+
+<div x-data=`{
+    selectedYear: "",
+    solutions: ${JSON.stringify(solutions)},
+}`>
+
+    <SolutionSelector />
+
+
+</div>
