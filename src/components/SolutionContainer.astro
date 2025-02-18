@@ -1,0 +1,21 @@
+---
+import SolutionSelector from "./SolutionSelector.astro"
+
+import solutions from "../data/solutions.json"
+---
+
+<div x-data=`{
+    selectedDay: "",
+    selectedYear: "",
+    solutions: ${JSON.stringify(solutions)},
+    availableDays: [],
+    changeYear() {
+        let yearContent = this.solutions.find(item => item.year.toString() === this.selectedYear)
+        this.availableDays = yearContent?.yearSolutions
+    }
+}`>
+
+    <SolutionSelector />
+
+
+</div>
