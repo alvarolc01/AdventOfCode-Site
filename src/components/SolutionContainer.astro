@@ -1,20 +1,43 @@
 ---
-import SolutionSelector from "./SolutionSelector.astro"
+import SolutionSelector from "./SolutionSelector.astro";
+import ProgressBar from "./ProgressBar.astro";
 
-import solutions from "../data/solutions.json"
+import solutions from "../data/solutions.json";
 ---
 
 <div x-data=`{
+    completionPercentage: 0,
     selectedDay: "",
     selectedYear: "",
     solutions: ${JSON.stringify(solutions)},
     availableDays: [],
+    init() {
+        const completedDays = this.solutions.reduce((acc, currentYear) => acc + (currentYear.yearSolutions?.length || 0), 0);
+        const totalYears = this.calculateTotalYears();
+        const totalProblems = totalYears * 25;
+
+        this.completionPercentage = parseFloat(((completedDays / totalProblems) * 100).toFixed(2));
+    },
     changeYear() {
-        let yearContent = this.solutions.find(item => item.year.toString() === this.selectedYear)
-        this.availableDays = yearContent?.yearSolutions
+        let yearContent = this.solutions.find(item => item.year.toString() === this.selectedYear);
+        this.availableDays = yearContent?.yearSolutions || [];
+
+        const completedDays = this.availableDays.length;
+        this.completionPercentage = parseFloat(((completedDays / 25) * 100).toFixed(2));
+    },
+    changeDay() {
+        console.log("Retrieve solution", this.selectedYear, this.selectedDay);
+    },
+    calculateTotalYears() {
+        const startYear = 2015;
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const christmasThisYear = new Date(currentYear, 11, 25);
+
+        return (currentDate > christmasThisYear) ? currentYear - startYear + 1 : currentYear - startYear;
     }
 }`>
-
+    <ProgressBar />
     <SolutionSelector />
 
 
