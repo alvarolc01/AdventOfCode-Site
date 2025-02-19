@@ -1,7 +1,8 @@
 ---
-import SolutionSelector from "./SolutionSelector.astro"
+import SolutionSelector from "./SolutionSelector.astro";
+import ProgressBar from "./ProgressBar.astro";
 
-import solutions from "../data/solutions.json"
+import solutions from "../data/solutions.json";
 ---
 
 <div x-data=`{
@@ -36,7 +37,7 @@ import solutions from "../data/solutions.json"
         return (currentDate > christmasThisYear) ? currentYear - startYear + 1 : currentYear - startYear;
     }
 }`>
-
+    <ProgressBar />
     <SolutionSelector />
 
 

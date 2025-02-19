@@ -1,0 +1,11 @@
+---
+
+---
+<div class="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-text" aria-live="polite" x-text=`completionPercentage + '% completed'`>
+
+    </div>
+    <div class="progress-bar">
+        <div class="progress" x-bind:style="`width: ${completionPercentage}%`"></div>
+    </div>
+</div>
