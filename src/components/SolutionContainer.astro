@@ -1,21 +1,19 @@
 ---
-import SolutionSelector from "./SolutionSelector.astro";
-import ProgressBar from "./ProgressBar.astro";
-
 import solutions from "../data/solutions.json";
 ---
 
 <div x-data=`{
     completionPercentage: 0,
-    selectedDay: "",
-    selectedYear: "",
+    loading: false,
+    selectedDay: '',
+    selectedYear: '',
     solutions: ${JSON.stringify(solutions)},
     availableDays: [],
+    currentSolution: '',
     init() {
         const completedDays = this.solutions.reduce((acc, currentYear) => acc + (currentYear.yearSolutions?.length || 0), 0);
-        const totalYears = this.calculateTotalYears();
-        const totalProblems = totalYears * 25;
-
+        const totalProblems = calculateTotalProblems();
+    
         this.completionPercentage = parseFloat(((completedDays / totalProblems) * 100).toFixed(2));
     },
     changeYear() {
@@ -24,21 +22,85 @@ import solutions from "../data/solutions.json";
 
         const completedDays = this.availableDays.length;
         this.completionPercentage = parseFloat(((completedDays / 25) * 100).toFixed(2));
+        this.selectedDay = ''
     },
-    changeDay() {
-        console.log("Retrieve solution", this.selectedYear, this.selectedDay);
-    },
-    calculateTotalYears() {
-        const startYear = 2015;
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-        const christmasThisYear = new Date(currentYear, 11, 25);
-
-        return (currentDate > christmasThisYear) ? currentYear - startYear + 1 : currentYear - startYear;
-    }
+    async changeDay() {
+        console.log("Selected Day", this.selectedDay, this.selectedYear);
+        this.loading = true;
+        this.currentSolution = await getURLSolution(this.selectedDay, this.selectedYear);
+        this.loading = false;
+     }
 }`>
-    <ProgressBar />
-    <SolutionSelector />
 
+    <div class="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-text" aria-live="polite" x-text=`completionPercentage + '% completed'`>
+
+        </div>
+        <div class="progress-bar">
+            <div class="progress" x-bind:style="`width: ${completionPercentage}%`"></div>
+        </div>
+    </div>
+
+
+    <div id="selectors-container">
+        <label>
+            <select x-model="selectedYear" @change="changeYear">
+                <option value="" disabled selected>Select an option</option>
+                <template x-for="yearlySolutions in solutions" :key="yearlySolutions.year">
+                    <option :value="yearlySolutions.year" x-text="yearlySolutions.year"></option>
+                </template>
+            </select>
+        </label>
+
+
+        <label>
+            <select x-model="selectedDay" x-bind:disabled='selectedYear == ""' @change="changeDay">
+                <option value="" disabled selected>Select an option</option>
+                <template x-for="daySolutions in availableDays" :key="daySolutions.day">
+                    <option :value="daySolutions.day" x-text="daySolutions.day + ' - ' + daySolutions.name"></option>
+                </template>
+            </select>
+        </label>
+    </div>
+
+
+    <div x-show="currentSolution != ''">
+        <pre><code x-text="currentSolution"></code></pre>
+    </div>
 
 </div>
+
+<script is:inline>
+    async function getURLSolution(day, year) {
+        console.log(day, year);
+        try {
+            const urlSolution = `https://raw.githubusercontent.com/alvarolc01/AdventOfCode/refs/heads/main/${year}/day_${day.padStart(2, "0")}/main.go`
+            const response = await fetch(urlSolution);
+            return await response.text();
+        } catch (error) {
+            return '// Error loading solution';
+        }
+    }
+
+    function calculateTotalProblems() {
+        const startYear = 2015;
+        const problemsPerYear = 25;
+
+        const now = new Date();
+        const estOffset = -5 * 60 * 60 * 1000;
+        const estTime = new Date(now.getTime() + estOffset);
+
+        const currentYear = estTime.getFullYear();
+        const currentMonth = estTime.getMonth();
+        const currentDay = estTime.getDate();
+
+        let totalProblems = (currentYear - startYear) * problemsPerYear;
+
+        if (currentMonth === 11) {
+            totalProblems += Math.min(problemsPerYear, currentDay);
+        }
+
+        return totalProblems;
+
+    }
+</script>
