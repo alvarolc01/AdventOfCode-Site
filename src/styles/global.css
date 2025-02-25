@@ -1,0 +1,252 @@
+/* Global Reset and Font */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/* Body Styling */
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Main Container */
+#main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Title */
+#main-title {
+    justify-items: center;
+}
+
+/* Solution Container */
+#solution-container {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.8rem;
+}
+
+/* Progress Bar */
+#progress-container {
+    justify-items: center;
+    width: 100%;
+    max-width: 700px;
+}
+
+.progress-bar {
+    margin-top: 0.5rem;
+    height: 20px;
+    width: 100%;
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #5fd35f;
+    transition: width 0.3s ease;
+}
+
+/* Selectors Container */
+#selectors-container {
+    padding: 0.5rem;
+}
+
+#selectors-container select {
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #555;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 5px;
+    width: 200px;
+}
+
+#selectors-container select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#selectors-container select option {
+    background-color: #333;
+    color: #eee;
+}
+
+/* Day Dropdown Adjustments */
+#selectors-container select:nth-child(2) {
+    width: auto;
+    min-width: 200px;
+}
+
+/* Code Container */
+.code-container {
+    position: relative;
+    background: #313244;
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden;
+    max-width: 1220px;
+    max-height: 500px;
+    display: none;
+    width: 100%;
+}
+
+.code-container[x-show="currentSolution != ''"] {
+    display: block;
+}
+
+/* Preformatted Text */
+pre {
+    overflow: auto;
+    white-space: pre;
+    max-height: 450px;
+    max-width: 100%;
+    padding-right: 10px;
+}
+
+code {
+    display: block;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Copy Button */
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #585b70;
+    color: #cdd6f4;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: background 0.3s;
+}
+
+.copy-button:hover {
+    background: #6c7086;
+}
+
+.copy-button:focus {
+    outline: none;
+}
+
+.copy-button.copied {
+    background: #5fd35f;
+    color: white;
+}
+
+/* Custom Scrollbar */
+pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #585b70;
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #cdd6f4;
+    border-radius: 4px;
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 600px) {
+    .code-container {
+        max-height: 200px;
+    }
+
+    pre {
+        max-height: 180px;
+    }
+}
+
+/* Footer Styling */
+footer {
+    width: 100%;
+    background-color: #2b2b2b;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+/* Footer Links */
+footer a {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+footer a:hover {
+    color: #5fd35f;
+}
+
+footer a::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #5fd35f;
+    transition: width 0.3s ease-in-out;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+footer a:hover::after {
+    width: 100%;
+}
+
+/* Separator */
+.separator {
+    padding: 0 0.2rem;
+}
+
+/* Footer Content */
+#footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* Footer Signature */
+#footer-signature {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    transition: color 0.3s ease-in-out;
+}
+
+#footer-signature:hover {
+    color: #d0d0d0;
+}
+
+/* Hidden Elements */
+[x-cloak] {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-in-out;
+}
