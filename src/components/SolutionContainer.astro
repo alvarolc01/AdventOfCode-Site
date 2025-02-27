@@ -27,7 +27,12 @@ import solutions from "../data/solutions.json";
     },
     async changeDay() {
         this.loading = true;
-        this.currentSolution = await getURLSolution(this.selectedDay, this.selectedYear);
+        let solutionCode = await getURLSolution(this.selectedDay, this.selectedYear);
+        this.currentSolution = Prism.highlight(
+              solutionCode,
+              Prism.languages.go,
+              'go'
+            );
         this.loading = false;
      }
 }` x-cloak>
@@ -84,7 +89,7 @@ import solutions from "../data/solutions.json";
                 });
             }
         ">
-            <code x-text="currentSolution" id="solution-display"></code>
+            <code x-html="currentSolution" id="solution-display"></code>
         </pre>
     </div>
 
