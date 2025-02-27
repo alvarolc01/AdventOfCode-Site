@@ -2,7 +2,7 @@
 import solutions from "../data/solutions.json";
 ---
 
-<div x-data=`{
+<div id="solution-container" x-data=`{
     completionPercentage: 0,
     loading: false,
     selectedDay: '',
@@ -23,16 +23,21 @@ import solutions from "../data/solutions.json";
         const completedDays = this.availableDays.length;
         this.completionPercentage = parseFloat(((completedDays / 25) * 100).toFixed(2));
         this.selectedDay = ''
+        this.currentSolution = '';
     },
     async changeDay() {
-        console.log("Selected Day", this.selectedDay, this.selectedYear);
         this.loading = true;
-        this.currentSolution = await getURLSolution(this.selectedDay, this.selectedYear);
+        let solutionCode = await getURLSolution(this.selectedDay, this.selectedYear);
+        this.currentSolution = Prism.highlight(
+              solutionCode,
+              Prism.languages.go,
+              'go'
+            );
         this.loading = false;
      }
-}`>
+}` x-cloak>
 
-    <div class="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
+    <div id="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-text" aria-live="polite" x-text=`completionPercentage + '% completed'`>
 
         </div>
@@ -64,15 +69,37 @@ import solutions from "../data/solutions.json";
     </div>
 
 
-    <div x-show="currentSolution != ''">
-        <pre><code x-text="currentSolution"></code></pre>
+    <div x-show="currentSolution != ''" class="code-container" x-cloak>
+        <button class="copy-button"
+                :class="{'copied': copied}"
+                @click="
+            navigator.clipboard.writeText(currentSolution).then(() => {
+                copied = true;
+                setTimeout(() => copied = false, 2000);
+            });
+        "
+                x-data="{ copied: false }">
+            <span x-text="copied ? 'Copied!' : 'Copy'"></span>
+        </button>
+        <pre style="overflow-x: auto;" x-ref="solution-display-container"
+             x-effect="
+            if (currentSolution != '') {
+                $nextTick(() => {
+                    $refs['solution-display-container'].scrollTop = 0;
+                });
+            }
+        ">
+            <code x-html="currentSolution" id="solution-display"></code>
+        </pre>
     </div>
+
+
+
 
 </div>
 
 <script is:inline>
     async function getURLSolution(day, year) {
-        console.log(day, year);
         try {
             const urlSolution = `https://raw.githubusercontent.com/alvarolc01/AdventOfCode/refs/heads/main/${year}/day_${day.padStart(2, "0")}/main.go`
             const response = await fetch(urlSolution);
