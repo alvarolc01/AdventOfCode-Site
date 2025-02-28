@@ -112,7 +112,8 @@ import solutions from "../data/solutions.json";
 <script is:inline>
     async function getURLSolution(day, year) {
         try {
-            const urlSolution = `https://raw.githubusercontent.com/alvaarolc01/AdventOfCode/refs/heads/main/${year}/day_${day.padStart(2, "0")}/main.go`
+            const baseURL = "https://raw.githubusercontent.com/alvarolc01/AdventOfCode/refs/heads/main";
+            const urlSolution = `${baseURL}/${year}/day_${day.padStart(2, "0")}/main.go`;
             const response = await fetch(urlSolution);
 
             if (!response.ok) {
