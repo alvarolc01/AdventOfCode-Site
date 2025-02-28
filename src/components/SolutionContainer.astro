@@ -48,8 +48,8 @@ import solutions from "../data/solutions.json";
     }
 }` x-cloak>
 
-    <div id="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-text" aria-live="polite" x-text=`completionPercentage + '% completed'`>
+    <div id="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100" aria-labelledby="progress-bar-label">
+        <div class="progress-text" aria-live="polite" x-text=`completionPercentage + '% completed'` id="progress-bar-label">
 
         </div>
         <div class="progress-bar">
@@ -60,8 +60,8 @@ import solutions from "../data/solutions.json";
 
     <div id="selectors-container">
         <label>
-            <select x-model="selectedYear" @change="changeYear">
-                <option value="" disabled selected>Select an option</option>
+            <select x-model="selectedYear" @change="changeYear" aria-label="Select Year">
+                <option value="" disabled selected>Select a year</option>
                 <template x-for="yearlySolutions in solutions" :key="yearlySolutions.year">
                     <option :value="yearlySolutions.year" x-text="yearlySolutions.year"></option>
                 </template>
@@ -70,8 +70,8 @@ import solutions from "../data/solutions.json";
 
 
         <label>
-            <select x-model="selectedDay" x-bind:disabled='selectedYear == ""' @change="changeDay">
-                <option value="" disabled selected>Select an option</option>
+            <select x-model="selectedDay" x-bind:disabled='selectedYear == ""' @change="changeDay" aria-label="Select Day">
+                <option value="" disabled selected>Select a day</option>
                 <template x-for="daySolutions in availableDays" :key="daySolutions.day">
                     <option :value="daySolutions.day" x-text="daySolutions.day + ' - ' + daySolutions.name"></option>
                 </template>
@@ -79,8 +79,8 @@ import solutions from "../data/solutions.json";
         </label>
     </div>
 
-    <div x-show="fetchingError" class="error-message" x-cloak>
-        <span class="error-icon">❌</span>
+    <div x-show="fetchingError" class="error-message" x-cloak role="alert" aria-live="assertive">
+        <span class="error-icon" aria-hidden="true">❌</span>
         <div>It seems the solution could not be fetched.</div>
     </div>
 
@@ -93,7 +93,8 @@ import solutions from "../data/solutions.json";
                 setTimeout(() => copied = false, 2000);
             });
         "
-                x-data="{ copied: false }">
+                x-data="{ copied: false }"
+                aria-label="Copy code to clipboard">
             <span x-text="copied ? 'Copied!' : 'Copy'"></span>
         </button>
         <pre style="overflow-x: auto;" x-ref="solution-display-container"
@@ -104,7 +105,7 @@ import solutions from "../data/solutions.json";
                 });
             }
         ">
-            <code x-html="currentSolution" id="solution-display"></code>
+            <code x-html="currentSolution" id="solution-display" aria-live="polite" role="document"></code>
         </pre>
     </div>
 </div>
