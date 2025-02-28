@@ -10,6 +10,7 @@ import solutions from "../data/solutions.json";
     solutions: ${JSON.stringify(solutions)},
     availableDays: [],
     currentSolution: '',
+    fetchingError: false,
     init() {
         const completedDays = this.solutions.reduce((acc, currentYear) => acc + (currentYear.yearSolutions?.length || 0), 0);
         const totalProblems = calculateTotalProblems();
@@ -24,17 +25,27 @@ import solutions from "../data/solutions.json";
         this.completionPercentage = parseFloat(((completedDays / 25) * 100).toFixed(2));
         this.selectedDay = ''
         this.currentSolution = '';
+        this.fetchingError = false;
     },
     async changeDay() {
+        this.fetchingError = false;
         this.loading = true;
+
         let solutionCode = await getURLSolution(this.selectedDay, this.selectedYear);
-        this.currentSolution = Prism.highlight(
-              solutionCode,
-              Prism.languages.go,
-              'go'
+
+        if (solutionCode == '') {
+            this.fetchingError = true;
+            this.currentSolution = '';
+        } else {
+            this.currentSolution = Prism.highlight(
+                solutionCode,
+                Prism.languages.go,
+                'go'
             );
+        }
+
         this.loading = false;
-     }
+    }
 }` x-cloak>
 
     <div id="progress-container" role="progressbar" x-bind:aria-valuenow="completionPercentage" aria-valuemin="0" aria-valuemax="100">
@@ -68,6 +79,10 @@ import solutions from "../data/solutions.json";
         </label>
     </div>
 
+    <div x-show="fetchingError" class="error-message" x-cloak>
+        <span class="error-icon">❌</span>
+        <div>It seems the solution could not be fetched.</div>
+    </div>
 
     <div x-show="currentSolution != ''" class="code-container" x-cloak>
         <button class="copy-button"
@@ -92,20 +107,21 @@ import solutions from "../data/solutions.json";
             <code x-html="currentSolution" id="solution-display"></code>
         </pre>
     </div>
-
-
-
-
 </div>
 
 <script is:inline>
     async function getURLSolution(day, year) {
         try {
-            const urlSolution = `https://raw.githubusercontent.com/alvarolc01/AdventOfCode/refs/heads/main/${year}/day_${day.padStart(2, "0")}/main.go`
+            const urlSolution = `https://raw.githubusercontent.com/alvaarolc01/AdventOfCode/refs/heads/main/${year}/day_${day.padStart(2, "0")}/main.go`
             const response = await fetch(urlSolution);
+
+            if (!response.ok) {
+                return ''
+            }
+
             return await response.text();
         } catch (error) {
-            return '// Error loading solution';
+            return '';
         }
     }
 

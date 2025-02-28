@@ -112,6 +112,18 @@ body {
     display: block;
 }
 
+.error-message {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-content: center;
+    gap:  0.6rem;
+}
+
+.error-icon {
+    font-size: 3rem;
+}
+
 /* Preformatted Text */
 pre {
     overflow: auto;
@@ -266,5 +278,9 @@ footer a:hover::after {
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+
+    .error-icon {
+        font-size: 2rem;
     }
 }
