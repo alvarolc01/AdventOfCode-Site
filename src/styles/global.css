@@ -136,7 +136,7 @@ pre {
 code {
     display: block;
     font-family: monospace;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
 }
 
@@ -207,18 +207,21 @@ footer {
 }
 
 /* Footer Links */
-footer a {
+footer a,
+.error-message a {
     color: white;
     text-decoration: none;
     position: relative;
     transition: color 0.3s ease-in-out;
 }
 
-footer a:hover {
+footer a:hover,
+.error-message a:hover {
     color: #5fd35f;
 }
 
-footer a::after {
+footer a::after,
+.error-message a::after {
     content: "";
     display: block;
     width: 0;
@@ -230,7 +233,8 @@ footer a::after {
     transform: translateX(-50%);
 }
 
-footer a:hover::after {
+footer a:hover::after,
+.error-message a:hover::after {
     width: 100%;
 }
 
