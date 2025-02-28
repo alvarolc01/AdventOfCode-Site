@@ -6,5 +6,6 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [alpinejs(), sitemap()]
+  integrations: [alpinejs(), sitemap()],
+  site: "https://aoc-solutions.pages.dev/"
 });
