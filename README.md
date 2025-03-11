@@ -1,8 +1,4 @@
 # AdventOfCode-Site
-Site to display my advent of code solutions
-
-# Personal Portfolio  
-
 Site to display my solutions to advent of code using Go. Full list of solutions can be found [here](https://github.com/alvarolc01/AdventOfCode).
 
 ## Tech Stack  
